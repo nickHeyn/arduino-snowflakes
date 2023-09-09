@@ -29,8 +29,8 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
   
   }
 
-  int fullHeight = quad_height*2;
-  int fullWidth = quad_width*2;
+  int fullHeight = quad_height*2 - 1;
+  int fullWidth = quad_width*2 - 1;
   boolean ** fullSnowflake = new boolean * [fullHeight];
 
   // reflect quad into full snowflake
@@ -45,13 +45,13 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
       else if(row >= quad_height && col < quad_width) {
         // reflect row
         int diff = row - quad_height;
-        int reflectedRow = quad_height - 1 - diff;
+        int reflectedRow = quad_height - diff - 2;
         pixel = fullSnowflake[reflectedRow][col];
       }
       else if(col >= quad_width) {
         // reflect column
         int diff = col - quad_width;
-        int reflectedCol = quad_width - 1 - diff;
+        int reflectedCol = quad_width - diff - 2;
         pixel = fullSnowflake[row][reflectedCol];
       }
       
