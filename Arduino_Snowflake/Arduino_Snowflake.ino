@@ -25,8 +25,8 @@ void setup() {
   // put your setup code here, to run once:
   randomSeed(analogRead(A0));
   Serial.begin(115200);
-  SnowflakeFactory factory;
-  Snowflake snowflake1 = factory.generateSnowflake(SNOWFLAKE_QUADRANT_WIDTH, SNOWFLAKE_QUADRANT_HEIGHT);
+  SnowflakeFactory factory(SNOWFLAKE_QUADRANT_WIDTH, SNOWFLAKE_QUADRANT_HEIGHT);
+  Snowflake snowflake1 = factory.generateSnowflake();
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c)) {
@@ -52,8 +52,4 @@ void loop() {
   delay(500);
   digitalWrite(LED_PIN, LOW);
   delay(500);
-}
-
-void displaySnowflake() {
-
 }

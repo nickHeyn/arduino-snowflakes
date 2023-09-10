@@ -4,15 +4,14 @@
 #include "Snowflake.h"
 #include "Arduino.h"
 #include <stdlib.h>
-#include <time.h>
 #include <vector>
 
 
-boolean isOutOfBoundsOfQuadHalf(int row, int col, int quad_width, int quad_height) {
+boolean SnowflakeFactory::isOutOfBoundsOfQuadHalf(int row, int col) {
   return row >= quad_height || row < 0 || col >= quad_width || col < 0 || col >= row;
 }
 
-void growSnowflake(boolean** grid, int row, int col, std::vector<SnowflakePixel> history, int quad_width, int quad_height) {
+void SnowflakeFactory::growSnowflake(boolean** grid, int row, int col, std::vector<SnowflakePixel> history) {
   int histSize = history.size();
   boolean willGrow = random(0, histSize+1) == 0;
   SnowflakePixel pixel(row, col);
@@ -20,22 +19,21 @@ void growSnowflake(boolean** grid, int row, int col, std::vector<SnowflakePixel>
   willGrow ? Serial.println("Will Grow") : Serial.println("Will not grow");
 
 
-  if(willGrow && !isOutOfBoundsOfQuadHalf(row, col, quad_width, quad_height) && histSize <= MAX_GROWTH_STEPS && std::find(history.begin(), history.end(), pixel) == history.end()) {
+  if(willGrow && !isOutOfBoundsOfQuadHalf(row, col) && histSize <= MAX_GROWTH_STEPS && std::find(history.begin(), history.end(), pixel) == history.end()) {
     grid[row][col] = true;
     Serial.println("Success here");
     std::vector<SnowflakePixel> newHist(history);
     newHist.push_back(pixel);
-    growSnowflake(grid, row+1, col, newHist, quad_width, quad_height);
-    growSnowflake(grid, row-1, col, newHist, quad_width, quad_height);
-    growSnowflake(grid, row, col + 1, newHist, quad_width, quad_height);
-    growSnowflake(grid, row, col - 1, newHist, quad_width, quad_height);
+    growSnowflake(grid, row+1, col, newHist);
+    growSnowflake(grid, row-1, col, newHist);
+    growSnowflake(grid, row, col + 1, newHist);
+    growSnowflake(grid, row, col - 1, newHist);
   }
 }
 
 
-Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
+Snowflake SnowflakeFactory::generateSnowflake() {
   boolean ** quad = new boolean * [quad_height];
-  srand(time(0));
 
   // make empty quad
   for(int row = 0; row < quad_height; row++) {
@@ -69,8 +67,7 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
     SnowflakePixel start(row, col);
     growthLocations[i] = SnowflakePixel(row, col);
     std::vector<SnowflakePixel> hist;
-    //hist.push_back(start);
-    growSnowflake(quad, row, col, hist, quad_width, quad_height);
+    growSnowflake(quad, row, col, hist);
   }
 
 
@@ -116,9 +113,7 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
     }
   }
 
-
-  // temp result
   Snowflake snowflake(fullSnowflake, fullHeight, fullWidth);
   Serial.println("Printed Snowflake");
-  return snowflake;
+  return Snowflake(fullSnowflake, fullHeight, fullWidth);
 }

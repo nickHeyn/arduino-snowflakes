@@ -8,11 +8,10 @@ class SnowflakePixel {
       col = col1;
     }
     SnowflakePixel() {
-      
+
     }
     int getRow() { return row; }
     int getCol() { return col; }
-    boolean isEqual(SnowflakePixel snowflakePixel) { return snowflakePixel.getRow() == row && snowflakePixel.getCol() == col; }
     bool operator== ( const SnowflakePixel &s) {
        return s.row == row && s.col == col;
     }
