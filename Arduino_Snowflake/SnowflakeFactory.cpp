@@ -60,7 +60,6 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
     }
   
   }
-  Serial.println("Sanity test");
 
   // grow parts of snowflake
   SnowflakePixel growthLocations[MAX_GROWTH_LOCATIONS];
@@ -77,7 +76,14 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
 
 
 
-  // reflect the half-quad pattern
+  // reflect the half-quad pattern to rest of quad
+  for (int row = 0; row < quad_height; row++) {
+    for(int col = 0; col < row; col++) {
+      boolean valueToReflect = quad[row][col];
+      quad[col][row] = valueToReflect;
+    }
+  }
+
 
   int fullHeight = quad_height*2 - 1;
   int fullWidth = quad_width*2 - 1;
@@ -96,13 +102,13 @@ Snowflake SnowflakeFactory::generateSnowflake(int quad_width, int quad_height) {
         // reflect row
         int diff = row - quad_height;
         int reflectedRow = quad_height - diff - 2;
-        //pixel = fullSnowflake[reflectedRow][col];// changeme
+        pixel = fullSnowflake[reflectedRow][col];
       }
       else if(col >= quad_width) {
         // reflect column
         int diff = col - quad_width;
         int reflectedCol = quad_width - diff - 2;
-        //pixel = fullSnowflake[row][reflectedCol];// changeme
+        pixel = fullSnowflake[row][reflectedCol];
       }
       
 
