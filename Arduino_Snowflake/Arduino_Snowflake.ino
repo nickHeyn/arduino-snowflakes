@@ -23,6 +23,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 void setup() {
   // put your setup code here, to run once:
+  randomSeed(analogRead(A0));
   Serial.begin(115200);
   SnowflakeFactory factory;
   Snowflake snowflake1 = factory.generateSnowflake(SNOWFLAKE_QUADRANT_WIDTH, SNOWFLAKE_QUADRANT_HEIGHT);
