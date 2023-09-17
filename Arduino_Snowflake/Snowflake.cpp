@@ -8,20 +8,22 @@ Snowflake::Snowflake(boolean ** grid, int snowflakeHeight1, int snowflakeWidth1)
   snowflakeWidth = snowflakeWidth1;
   xPos = 30;
   yPos = 30;
+  xVel = 0;
+  yVel = 1;
 };
 
-void Snowflake::drawSnowflake(Adafruit_SSD1306 display) {
-  display.clearDisplay();
-  int count = 0;
+void Snowflake::drawSnowflake(Adafruit_SSD1306* display, int displayHeight, int displayWidth) {
   for(int row = 0; row < snowflakeHeight; row++) {
     for(int col = 0; col < snowflakeWidth; col++) {
-        if(pixelGrid[row][col]) {
-          display.drawPixel(xPos+col, yPos+row, 1);
-        }
-        
-        count++;
+      int displayXPos = xPos + col;
+      int displayYPos = yPos + row;
+      if(pixelGrid[row][col] &&
+         displayXPos >= 0 &&
+         displayXPos < displayWidth &&
+         displayYPos >= 0 &&
+         displayYPos < displayHeight) {
+        display->drawPixel(displayXPos, displayYPos, 1);
+      }
     }
   }
-  Serial.println(count);
-  display.display();
 };

@@ -15,13 +15,10 @@ void SnowflakeFactory::growSnowflake(boolean** grid, int row, int col, std::vect
   int histSize = history.size();
   boolean willGrow = random(0, histSize+1) == 0;
   SnowflakePixel pixel(row, col);
-  Serial.println("Trying to grow " + willGrow);
-  willGrow ? Serial.println("Will Grow") : Serial.println("Will not grow");
-
 
   if(willGrow && !isOutOfBoundsOfQuadHalf(row, col) && histSize <= MAX_GROWTH_STEPS && std::find(history.begin(), history.end(), pixel) == history.end()) {
     grid[row][col] = true;
-    Serial.println("Success here");
+    
     std::vector<SnowflakePixel> newHist(history);
     newHist.push_back(pixel);
     growSnowflake(grid, row+1, col, newHist);
@@ -32,7 +29,7 @@ void SnowflakeFactory::growSnowflake(boolean** grid, int row, int col, std::vect
 }
 
 
-Snowflake SnowflakeFactory::generateSnowflake() {
+Snowflake* SnowflakeFactory::generateSnowflake() {
   boolean ** quad = new boolean * [quad_height];
 
   // make empty quad
@@ -50,6 +47,7 @@ Snowflake SnowflakeFactory::generateSnowflake() {
       for(int col = 0; col < quad_width; col++) {
         quad[row][col] = true;
       }
+
     }
     else {
       // light up diagonal and last column
@@ -70,9 +68,6 @@ Snowflake SnowflakeFactory::generateSnowflake() {
     growSnowflake(quad, row, col, hist);
   }
 
-
-
-
   // reflect the half-quad pattern to rest of quad
   for (int row = 0; row < quad_height; row++) {
     for(int col = 0; col < row; col++) {
@@ -80,7 +75,6 @@ Snowflake SnowflakeFactory::generateSnowflake() {
       quad[col][row] = valueToReflect;
     }
   }
-
 
   int fullHeight = quad_height*2 - 1;
   int fullWidth = quad_width*2 - 1;
@@ -96,13 +90,13 @@ Snowflake SnowflakeFactory::generateSnowflake() {
         pixel = quad[row][col];
       }
       else if(row >= quad_height && col < quad_width) {
-        // reflect row
+        // reflect into lower left quadrant
         int diff = row - quad_height;
         int reflectedRow = quad_height - diff - 2;
         pixel = fullSnowflake[reflectedRow][col];
       }
       else if(col >= quad_width) {
-        // reflect column
+        // reflect right side of grid
         int diff = col - quad_width;
         int reflectedCol = quad_width - diff - 2;
         pixel = fullSnowflake[row][reflectedCol];
@@ -113,7 +107,6 @@ Snowflake SnowflakeFactory::generateSnowflake() {
     }
   }
 
-  Snowflake snowflake(fullSnowflake, fullHeight, fullWidth);
-  Serial.println("Printed Snowflake");
-  return Snowflake(fullSnowflake, fullHeight, fullWidth);
+  delete [] quad;
+  return new Snowflake(fullSnowflake, fullHeight, fullWidth);
 }

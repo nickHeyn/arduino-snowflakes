@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <vector>
 #include "Snowflake.h"
 #include "SnowflakeFactory.h"
 
@@ -13,6 +14,7 @@
 #define OLED_RESET -1
 
 // Snowflake settings
+#define MAX_NUM_SNOWFLAKES 5
 #define SNOWFLAKE_QUADRANT_HEIGHT 9
 #define SNOWFLAKE_QUADRANT_WIDTH 9
 #define SNOWFLAKE_FULL_HEIGHT SNOWFLAKE_QUADRANT_HEIGHT * 2 - 1 // 17
@@ -20,13 +22,16 @@
 
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+SnowflakeFactory factory(SNOWFLAKE_QUADRANT_WIDTH, SNOWFLAKE_QUADRANT_HEIGHT);
+std::vector<Snowflake> snowflakes;
+
 
 void setup() {
   // put your setup code here, to run once:
   randomSeed(analogRead(A0));
   Serial.begin(115200);
-  SnowflakeFactory factory(SNOWFLAKE_QUADRANT_WIDTH, SNOWFLAKE_QUADRANT_HEIGHT);
-  Snowflake snowflake1 = factory.generateSnowflake();
+  Snowflake* snowflake1 = (factory.generateSnowflake());
+  snowflakes.push_back(*snowflake1);
 
   // SSD1306_SWITCHCAPVCC = generate display voltage from 3.3V internally
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3c)) {
@@ -40,9 +45,6 @@ void setup() {
   display.display();
   delay(2000); // Pause for 2 seconds
 
-  // show snowflake
-  snowflake1.drawSnowflake(display);
-
   pinMode(LED_PIN, OUTPUT);
 }
 
@@ -50,6 +52,22 @@ void loop() {
   // put your main code here, to run repeatedly:
   digitalWrite(LED_PIN, HIGH);
   delay(500);
+  moveSnowflakes();
+  drawSnowlakes();
   digitalWrite(LED_PIN, LOW);
   delay(500);
+}
+
+void drawSnowlakes() {
+  display.clearDisplay();
+  for(int snowflakeIndex = 0; snowflakeIndex < 1; snowflakeIndex++) {
+    snowflakes[snowflakeIndex].drawSnowflake(&display, SCREEN_HEIGHT, SCREEN_WIDTH);
+  }
+  display.display();
+}
+
+void moveSnowflakes() {
+  for(int snowflakeIndex = 0; snowflakeIndex < 1; snowflakeIndex++) {
+    snowflakes[snowflakeIndex].moveSnowflake();
+  }
 }
