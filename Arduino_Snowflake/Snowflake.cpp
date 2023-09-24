@@ -2,14 +2,15 @@
 #include <Adafruit_SSD1306.h>
 #include "Arduino.h"
 
-Snowflake::Snowflake(boolean ** grid, int snowflakeHeight1, int snowflakeWidth1) {
+Snowflake::Snowflake(boolean ** grid, int xPos1, int yPos1, int snowflakeHeight1, int snowflakeWidth1, unsigned long spawnTime) {
   pixelGrid = grid;
   snowflakeHeight = snowflakeHeight1;
   snowflakeWidth = snowflakeWidth1;
-  xPos = 30;
-  yPos = 30;
+  xPos = xPos1;
+  yPos = yPos1;
   xVel = 0;
-  yVel = 1;
+  yVel = 6;
+  timeAtLastMove = spawnTime;
 };
 
 void Snowflake::drawSnowflake(Adafruit_SSD1306* display, int displayHeight, int displayWidth) {

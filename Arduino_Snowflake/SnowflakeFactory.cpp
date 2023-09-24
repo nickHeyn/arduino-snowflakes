@@ -29,7 +29,8 @@ void SnowflakeFactory::growSnowflake(boolean** grid, int row, int col, std::vect
 }
 
 
-Snowflake* SnowflakeFactory::generateSnowflake() {
+Snowflake* SnowflakeFactory::generateSnowflake(int xPos, int yPos) {
+  Serial.println("Entering generateSnowflake...");
   boolean ** quad = new boolean * [quad_height];
 
   // make empty quad
@@ -107,6 +108,10 @@ Snowflake* SnowflakeFactory::generateSnowflake() {
     }
   }
 
-  delete [] quad;
-  return new Snowflake(fullSnowflake, fullHeight, fullWidth);
+  for(int r = 0; r < quad_height; r++){
+    delete[] quad[r];
+  }
+  delete[] quad;
+
+  return new Snowflake(fullSnowflake, xPos, yPos, fullHeight, fullWidth, millis());
 }
