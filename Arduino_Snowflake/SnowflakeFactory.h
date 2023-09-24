@@ -14,7 +14,7 @@ class SnowflakeFactory {
       quad_height = quad_h;
     }
 
-    Snowflake* generateSnowflake(int xPos, int yPos);
+    Snowflake generateSnowflake(int xPos, int yPos);
 
   private: 
     int quad_width, quad_height;

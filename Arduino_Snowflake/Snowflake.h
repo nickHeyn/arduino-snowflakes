@@ -7,6 +7,9 @@
 
 class Snowflake {
   public:
+    Snowflake() {
+      
+    }
     Snowflake(boolean ** grid, int xPos1, int yPos1, int snowflakeHeight1, int snowflakeWidth1, unsigned long spawnTime);
     void drawSnowflake(Adafruit_SSD1306* display, int displayHeight, int displayWidth);
     void moveSnowflake(unsigned long currentTime) {
