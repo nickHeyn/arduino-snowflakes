@@ -14,8 +14,8 @@
 #define OLED_RESET -1
 
 // Snowflake settings
-#define MAX_NUM_SNOWFLAKES 5
-#define STARTING_Y_POS_WINDOW 8
+#define MAX_NUM_SNOWFLAKES 4
+#define STARTING_Y_POS_WINDOW 50
 #define SNOWFLAKE_QUADRANT_HEIGHT 9
 #define SNOWFLAKE_QUADRANT_WIDTH 9
 #define SNOWFLAKE_FULL_HEIGHT SNOWFLAKE_QUADRANT_HEIGHT * 2 - 1
@@ -89,24 +89,3 @@ for(int snowflakeIndex = 0; snowflakeIndex < MAX_NUM_SNOWFLAKES; snowflakeIndex+
     }
   }
 }
-
-/*void removeOutOfBoundsSnowflakes() {
-  for(int snowflakeIndex = 0; snowflakeIndex < snowflakes.size(); snowflakeIndex++) {
-    Snowflake* snowflake = &snowflakes[snowflakeIndex];
-    if(snowflake->getYPos() > SCREEN_HEIGHT) {
-      snowflakes.erase(snowflakes.begin() + snowflakeIndex);
-      snowflake->deletePixelGrid();
-      delete snowflake;
-      snowflakeIndex--;
-    }
-  }
-}*/
-
-/*void spawnSnowflakes() {
-  if(snowflakes.size() < MAX_NUM_SNOWFLAKES) {
-    int startingXPos = random(0, SCREEN_WIDTH - SNOWFLAKE_FULL_WIDTH);
-    int startingYPos = random(-SNOWFLAKE_FULL_HEIGHT - 1 - STARTING_Y_POS_WINDOW, -SNOWFLAKE_FULL_HEIGHT - 1);
-    snowflakes.push_back(*(factory.generateSnowflake(startingXPos, startingYPos)));
-  }
-
-}*/
